@@ -17,11 +17,11 @@ jobs:
     - name: Change to Ansible directory and clone Ansible Repo
       run: cd ansible && git clone https://github.com/rubrikinc/rubrik-modules-for-ansible.git
     - name: Stage Ansible files
-      run: cd ansible/rubrik-modules-for-ansible/ && git checkout melliott-dev && cp -R rubrikinc .. && cp ansible.cfg ../..
+      run: cd ansible/rubrik-modules-for-ansible/ && git checkout melliott-dev && cp -R rubrikinc ../.. && cp ansible.cfg ../..
     - name: Post Message to Slack
       run: ~/slack.sh -h ${{ secrets.SLACK_WEBHOOK }}  -u GitHubActions -i unicorn_face -c Ansible  -p enable -m 'Running ansible-lint on *${{ github.repository }}*' 
     - name: Run ansible-lint
-      run: cd ansible && ansible-lint -v
+      run: ansible-lint -v ansible/*.yaml
     - name: Post Message to Slack
       run: ~/slack.sh -h ${{ secrets.SLACK_WEBHOOK }}  -u GitHubActions -i unicorn_face -c Ansible  -p enable -m 'Creating SLA Domain *${{ secrets.RUBRIK_SLA_NAME }}* on *${{ secrets.RUBRIK_CDM_NODE_IP }}*'             
     - name: Run Ansible Playbook to create new SLA Domain

@@ -3,6 +3,7 @@ name: Run Ansible Playbooks
 on:
   pull_request:
     branches: [ master ]
+    types: [closed]
 
 jobs:
   run-playbooks:

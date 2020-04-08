@@ -1,0 +1,67 @@
+name: Run Ansible Playbooks
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  run-playbooks:
+    runs-on: self-hosted
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    - name: Change to Ansible directory
+      run: cd ansible
+    - name: Clone Ansible Repo
+      run: git clone https://github.com/rubrikinc/rubrik-modules-for-ansible.git
+    - name: Stage Ansible files
+      run: cd rubrik-modules-for-ansible/ && git checkout melliott-dev && cd .. && cp -R rubrik-modules-for-ansible/rubrikinc . && cp rubrik-modules-for-ansible/ansible.cfg .
+    - name: Post Message to Slack
+      run: ~/slack.sh -h ${{ secrets.SLACK_WEBHOOK }}  -u GitHubActions -i unicorn_face -c Ansible  -p enable -m 'Running ansible-lint on *${{ github.repository }}*' 
+    - name: Run ansible-lint
+      run: ansible-lint -v
+    - name: Post Message to Slack
+      run: ~/slack.sh -h ${{ secrets.SLACK_WEBHOOK }}  -u GitHubActions -i unicorn_face -c Ansible  -p enable -m 'Creating SLA Domain *${{ secrets.RUBRIK_SLA_NAME }}* on *${{ secrets.RUBRIK_CDM_NODE_IP }}*'             
+    - name: Run Ansible Playbook to create new SLA Domain
+      run: ansible-playbook --verbose create_sla.yaml
+      env:
+        rubrik_cdm_node_ip: ${{ secrets.RUBRIK_CDM_NODE_IP }}
+        rubrik_cdm_token: ${{ secrets.RUBRIK_CDM_TOKEN }}
+        RUBRIK_SLA_NAME: ${{ secrets.RUBRIK_SLA_NAME }}
+        RUBRIK_ARCHIVE_NAME: ${{ secrets.RUBRIK_ARCHIVE_NAME }}
+    - name: Post Message to Slack
+      run: ~/slack.sh -h ${{ secrets.SLACK_WEBHOOK }}  -u GitHubActions -i unicorn_face -c Ansible  -p enable -m 'Cloning VM template to *${{ secrets.VMNAME }}*'             
+    - name: Run Ansible Playbook to clone VM
+      run: ansible-playbook --verbose clone_template.yaml
+      env:
+        VMWARE_USER: ${{ secrets.VMWARE_USER }}
+        VMWARE_PASSWORD: ${{ secrets.VMWARE_PASSWORD }}
+        VMWARE_VCSA: ${{ secrets.VMWARE_VCSA }}
+        VMWARE_DATACENTER: ${{ secrets.VMWARE_DATACENTER }}
+        VMWARE_CLUSTER: ${{ secrets.VMWARE_CLUSTER }}
+        VMWARE_FOLDER: ${{ secrets.VMWARE_FOLDER }}
+        VMNAME: ${{ secrets.VMNAME }}
+    - name: Post Message to Slack
+      run: ~/slack.sh -h ${{ secrets.SLACK_WEBHOOK }}  -u GitHubActions -i unicorn_face -c Ansible  -p enable -m 'Refreshing vSphere metadata on *${{ secrets.RUBRIK_CDM_NODE_IP }}*'                 
+    - name: Run Ansible Playbook to refresh vCenter
+      run: ansible-playbook --verbose refresh_vcenter.yaml
+      env:
+        rubrik_cdm_node_ip: ${{ secrets.RUBRIK_CDM_NODE_IP }}
+        rubrik_cdm_token: ${{ secrets.RUBRIK_CDM_TOKEN }}
+        VMWARE_VCSA: ${{ secrets.VMWARE_VCSA }}
+    - name: Post Message to Slack
+      run: ~/slack.sh -h ${{ secrets.SLACK_WEBHOOK }}  -u GitHubActions -i unicorn_face -c Ansible  -p enable -m 'Assign SLA Domain *${{ secrets.RUBRIK_SLA_NAME }}* to *${{ secrets.VMNAME }}*'
+    - name: Run Ansible Playbook to protect VM
+      run: ansible-playbook --verbose protect_vm.yaml
+      env:
+        rubrik_cdm_node_ip: ${{ secrets.RUBRIK_CDM_NODE_IP }}
+        rubrik_cdm_token: ${{ secrets.RUBRIK_CDM_TOKEN }}
+        RUBRIK_SLA_NAME: ${{ secrets.RUBRIK_SLA_NAME }}
+        VMNAME: ${{ secrets.VMNAME }}      
+    - name: Post Message to Slack
+      run: ~/slack.sh -h ${{ secrets.SLACK_WEBHOOK }}  -u GitHubActions -i unicorn_face -c Ansible  -p enable -m 'Workflow complete'

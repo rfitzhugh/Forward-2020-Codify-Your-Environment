@@ -1,0 +1,22 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+
+    - name: Create Test SLA
+      rubrik_create_sla:
+        name: "{{ lookup('env', 'RUBRIK_SLA_NAME') }}"
+        hourly_frequency: 1
+        hourly_retention: 24
+        daily_frequency: 1
+        daily_retention: 30
+        monthly_frequency: 1
+        monthly_retention: 12
+        yearly_frequency: 1
+        yearly_retention: 5
+        archive_name: "{{ lookup('env', 'RUBRIK_ARCHIVE_NAME') }}"
+        retention_on_brik_in_days: 7
+        instant_archive: True

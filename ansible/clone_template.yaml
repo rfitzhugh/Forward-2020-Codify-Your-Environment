@@ -1,0 +1,16 @@
+---
+- name: Create a VM from a template
+  hosts: localhost
+  gather_facts: no
+  tasks:
+  - name: Clone the template
+    vmware_guest:
+      hostname: "{{ lookup('env', 'VMWARE_VCSA') }}"
+      validate_certs: False
+      name: "{{ lookup('env', 'VMNAME') }}"
+      template: TMPL_UBUNTU
+      datacenter: "{{ lookup('env', 'VMWARE_DATACENTER') }}"
+      folder: "{{ lookup('env', 'VMWARE_FOLDER') }}"
+      state: poweredon
+      cluster: "{{ lookup('env', 'VMWARE_CLUSTER') }}"
+      wait_for_ip_address: no

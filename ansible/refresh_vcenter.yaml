@@ -1,0 +1,12 @@
+---
+
+    - hosts: localhost
+      connection: local
+      gather_facts: false
+
+      tasks:
+
+        - name: Refresh vCenter
+          rubrik_refresh_vcenter:
+            vcenter_ip: "{{ lookup('env', 'VMWARE_VCSA') }}"
+            wait_for_completion: true

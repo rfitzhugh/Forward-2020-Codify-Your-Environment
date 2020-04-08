@@ -1,0 +1,9 @@
+---
+    - hosts: localhost
+      connection: local
+      gather_facts: false
+      tasks:
+        - name: Protect VM
+          rubrik_assign_sla:
+            sla_name: "{{ lookup('env', 'RUBRIK_SLA_NAME') }}"
+            object_name: "{{ lookup('env', 'VMNAME') }}"

@@ -1,10 +1,10 @@
-# Using Ansible and Terraform to Codify Your Environment (SESSION #)
+# Using Ansible and Terraform to Codify Your Environment
 
 Imagine a world in which in your infrastructure is provisioned and managed by a few lines of code. We’ll walk through both configuration management and infrastructure as code, how to apply them to your data center, and give live demos using Rubrik’s fully robust set of APIs.
 
 Join Matt Elliott and Rebecca Fitzhugh as they walk through calling APIs to create workflows that instantiate, protect, and recover workloads on-prem and in the cloud.
 
-Code and slides in repo. This is from session XYZ at Rubrik Forward (Digital Summit) 2020.
+Code and slides in repo. This is from a session at Rubrik Forward (Digital Summit) 2020.
 
 ## Demo 1
 

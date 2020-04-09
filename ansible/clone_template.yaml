@@ -15,3 +15,5 @@
       state: poweredon
       cluster: "{{ lookup('env', 'VMWARE_CLUSTER') }}"
       wait_for_ip_address: no
+      networks:
+      - name: VM_Production

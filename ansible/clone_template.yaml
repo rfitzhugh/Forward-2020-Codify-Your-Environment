@@ -7,8 +7,8 @@
     vmware_guest:
       hostname: "{{ lookup('env', 'VMWARE_VCSA') }}"
       validate_certs: False
-      #name: "{{ lookup('env', 'VMNAME') }}"
-      name: Forward2020
+      name: "{{ lookup('env', 'VMNAME') }}"
+      #name: Forward2020
       template: TMPL_UBUNTU
       datacenter: "{{ lookup('env', 'VMWARE_DATACENTER') }}"
       folder: "{{ lookup('env', 'VMWARE_FOLDER') }}"

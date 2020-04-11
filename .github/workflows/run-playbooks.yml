@@ -27,8 +27,7 @@ jobs:
     - name: Run Ansible Playbook to create new SLA Domain
       run: ansible-playbook --verbose ansible/create_sla.yaml
       env:
-        #rubrik_cdm_node_ip: ${{ secrets.RUBRIK_CDM_NODE_IP }}
-        rubrik_cdm_node_ip: 192.168.150.131
+        rubrik_cdm_node_ip: ${{ secrets.RUBRIK_CDM_NODE_IP }}
         rubrik_cdm_token: ${{ secrets.RUBRIK_CDM_TOKEN }}
         RUBRIK_SLA_NAME: ${{ secrets.RUBRIK_SLA_NAME }}
         RUBRIK_ARCHIVE_NAME: ${{ secrets.RUBRIK_ARCHIVE_NAME }}
@@ -49,8 +48,7 @@ jobs:
     - name: Run Ansible Playbook to refresh vCenter
       run: ansible-playbook -vvv ansible/refresh_vcenter.yaml && sleep 15
       env:
-        #rubrik_cdm_node_ip: ${{ secrets.RUBRIK_CDM_NODE_IP }}
-        rubrik_cdm_node_ip: 192.168.150.131
+        rubrik_cdm_node_ip: ${{ secrets.RUBRIK_CDM_NODE_IP }}
         rubrik_cdm_token: ${{ secrets.RUBRIK_CDM_TOKEN }}
         VMWARE_VCSA: ${{ secrets.VMWARE_VCSA }}
     - name: Post Message to Slack
@@ -58,8 +56,7 @@ jobs:
     - name: Run Ansible Playbook to protect VM
       run: ansible-playbook -vvv ansible/protect_vm.yaml
       env:
-        #rubrik_cdm_node_ip: ${{ secrets.RUBRIK_CDM_NODE_IP }}
-        rubrik_cdm_node_ip: 192.168.150.131
+        rubrik_cdm_node_ip: ${{ secrets.RUBRIK_CDM_NODE_IP }}
         rubrik_cdm_token: ${{ secrets.RUBRIK_CDM_TOKEN }}
         RUBRIK_SLA_NAME: ${{ secrets.RUBRIK_SLA_NAME }}
         VMNAME: ${{ secrets.VMNAME }}      

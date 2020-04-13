@@ -34,7 +34,8 @@ The following pre-requisites are required for this example:
 * Git and GitHub
 * Slack
 * Rubrik CDM
-* A Linux VM to serve as a "runner"
+
+This demo leverages a CI workflow, found at `/.github/workflows/run-playbooks.yaml`
 
 ### Create a new SLA Domain
 This demonstration uses one of the Rubrik Modules for Ansible to create a new SLA Domain. This SLA Domain will utilize the

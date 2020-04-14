@@ -46,7 +46,7 @@ jobs:
     - name: Post Message to Slack
       run: ~/slack.sh -h ${{ secrets.SLACK_WEBHOOK }}  -u GitHubActions -i unicorn_face -c Ansible  -p enable -m 'Refreshing vSphere metadata on *${{ secrets.RUBRIK_CDM_NODE_IP }}*'                 
     - name: Run Ansible Playbook to refresh vCenter
-      run: ansible-playbook -vvv ansible/refresh_vcenter.yaml && sleep 15
+      run: ansible-playbook -vvv ansible/refresh_vcenter.yaml && sleep 30
       env:
         rubrik_cdm_node_ip: ${{ secrets.RUBRIK_CDM_NODE_IP }}
         rubrik_cdm_token: ${{ secrets.RUBRIK_CDM_TOKEN }}

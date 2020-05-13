@@ -1,9 +1,9 @@
 name: Run Ansible Playbooks
 
 on:
-  pull_request:
-    branches: [ master ]
-    types: [closed]
+  push:
+    branches:
+      - master
 
 jobs:
   run-playbooks:

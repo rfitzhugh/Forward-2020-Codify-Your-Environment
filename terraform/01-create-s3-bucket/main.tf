@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "rf-tf-test-bucket" {
   bucket = "rf-tf-test-bucket"
   acl    = "private"
   versioning {
-    enabled = true
+    enabled = false
   }
 
     tags = {
